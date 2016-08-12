@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="pe.com.sedaloreto.appsms">
+
+    <uses-permission android:name="android.permission.SEND_RESPOND_VIA_MESSAGE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.BROADCAST_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icon_app"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".SendSmsActivity"
+            android:icon="@drawable/icon_app"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Holo.Light" />
+        <activity
+            android:name=".MenuOpciones"
+            android:icon="@drawable/icon_app"
+            android:theme="@android:style/Theme.Holo.Light" />
+        <activity
+            android:name=".Login"
+            android:icon="@drawable/icon_app"
+            android:theme="@android:style/Theme.Holo.Light">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ListaClientes"
+            android:icon="@drawable/icon_app"
+            android:theme="@android:style/Theme.Holo.Light" />
+        <activity android:name=".MensajePersonalizado"
+            android:icon="@drawable/icon_app"
+            android:theme="@android:style/Theme.Holo.Light"
+
+            >
+
+
+        </activity>
+    </application>
+
+</manifest>
