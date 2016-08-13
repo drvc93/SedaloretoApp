@@ -223,7 +223,6 @@ public class MensajePersonalizado extends Activity {
 
             }
 
-
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("NextNumber",clts.get(0).Celular);
                 editor.putString("NextCod",clts.get(0).codCliente);

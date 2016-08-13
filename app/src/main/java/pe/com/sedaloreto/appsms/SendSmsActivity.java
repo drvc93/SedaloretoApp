@@ -6,7 +6,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -26,6 +28,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import DatabaseModel.Cliente;
+import Task.ActualizarEstadoTask;
+import Task.ListaClienteTask;
 import  au.com.bytecode.opencsv.CSVReader;
 
 
@@ -37,6 +44,11 @@ public class SendSmsActivity extends Activity {
     int contadorEnvio=0;
     Handler updateBarHandler;
     EditText txtMensaje;
+    String sharedName = "MyPrefers";
+    SharedPreferences sharedPreferences;
+    String cod_cliente_update;
+    ArrayList<String> listNumeros ;
+    ArrayList<Cliente> aux_cliente = new ArrayList<Cliente>();
 
     Context context=this;
     Button  btnActivar ;
@@ -47,8 +59,8 @@ public class SendSmsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_sms);
         btnActivar = (Button)findViewById(R.id.btnActivar);
-
-
+        sharedPreferences = getSharedPreferences(sharedName, MODE_PRIVATE);
+        LoadDataCliente();
 
 
         btnActivar.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +73,37 @@ public class SendSmsActivity extends Activity {
         });
     }
 
+    public void LoadDataCliente (){
+
+        ListaClienteTask  listaClienteTask = new ListaClienteTask();
+        AsyncTask<String,String, Cliente[]> asyncTask ;
+        Cliente[] clientes;
+        listNumeros = new ArrayList<String>();
+        String url = "http://daniel88344-001-site1.etempurl.com/";
+
+
+        try {
+            asyncTask = listaClienteTask.execute("1",url);
+            clientes = (Cliente[])asyncTask.get();
+            if (clientes!=null && clientes.length>0){
+
+                for (int i  = 0 ; i<clientes.length; i++){
+                    aux_cliente.add(clientes[i]);
+                    String num = clientes[i].Celular;
+                    listNumeros.add(num);
+                    cod_cliente_update = clientes[i].codCliente;
+
+                }
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
      public  void GetdataCSV () {
 
@@ -113,7 +156,8 @@ public class SendSmsActivity extends Activity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //dialog.cancel();
-                        GetdataCSV();
+                       // GetdataCSV();
+                        CreateSMS();
                     }
                 });
 
@@ -132,6 +176,131 @@ public class SendSmsActivity extends Activity {
 
 
     }
+
+
+
+
+    public  void  CreateSMS (){
+        String nomcliente = aux_cliente.get(0).NombreCliente.toString().substring(0,10);
+        String deuda =aux_cliente.get(0).Deuda;
+        String meses = aux_cliente.get(0).Meses;
+        final String msj =  "Estimado "+ nomcliente+ " SEDALORETO le informa que tiene una deuda de S/. "+deuda+" soles por " + meses + ", meses,sirvase a pagar a la oficina  por favor.";
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                for (int i = 0 ; i<listNumeros.size();i++){
+
+
+                    try {
+
+
+                        SmsManager sms = SmsManager.getDefault();
+                        sms.sendTextMessage(listNumeros.get(i), null, msj, null,null);
+                        Log.i("cont mensajes ", String.valueOf(i));
+                        Thread.sleep(3000);
+                        ActulizarCliente(cod_cliente_update);
+                        GetNextCliente(msj);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Log.i("Value",String.valueOf(i));
+
+
+
+                }
+
+
+            }
+        }).start();
+
+
+
+    }
+
+
+    public void  ActulizarCliente (String cod) {
+
+        AsyncTask<String,String,String> async ;
+        ActualizarEstadoTask actualizarEstadoTask = new ActualizarEstadoTask();
+
+        try {
+            async = actualizarEstadoTask.execute(cod);
+            String res = (String)async.get();
+            Log.i("Cliente actulizado >>>" , res);
+//            Toast.makeText(MensajePersonalizado.this, res, Toast.LENGTH_SHORT).show();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    public  void  GetNextCliente (String msj){
+
+
+
+
+        ListaClienteTask listaClienteTask = new ListaClienteTask();
+        AsyncTask<String,String, Cliente[]> asyncTask ;
+        Cliente[] clientes;
+        ArrayList<Cliente> clts  = new ArrayList<Cliente>();
+        listNumeros = new ArrayList<String>();
+        String url = "http://daniel88344-001-site1.etempurl.com/";
+
+
+        try {
+            asyncTask = listaClienteTask.execute("1",url);
+            clientes = (Cliente[])asyncTask.get();
+            if (clientes.length>0){
+                for (int i  = 0 ; i<clientes.length; i++){
+                    clts = ConvertArrToList(clientes);
+                }
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("NextNumber",clts.get(0).Celular);
+                editor.putString("NextCod",clts.get(0).codCliente);
+                editor.putString("NextMsj",msj);
+                editor.putString("NextDeuda",clts.get(0).Deuda );
+                editor.putString("NextNumMeses",clts.get(0).Meses);
+                editor.putString("NextNombre",clts.get(0).NombreCliente);
+                editor.commit();
+                //Process.killProcess(Process.myPid());
+                Intent i = getBaseContext().getPackageManager()
+                        .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+    }
+
+    public ArrayList<Cliente>  ConvertArrToList(Cliente[] clt){
+
+        ArrayList<Cliente> res = new ArrayList<Cliente>();
+
+        for (int i = 0 ; i< clt.length ;i++){
+
+            res.add(clt[i]);
+
+
+        }
+
+        return  res;
+    }
+
+
+
 
 
     public  void GetDataFromArray (List<String[]>  var_list ){

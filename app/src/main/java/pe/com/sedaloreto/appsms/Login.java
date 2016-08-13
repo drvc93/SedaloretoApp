@@ -48,8 +48,18 @@ public class Login extends Activity {
             String num = sharedPreferences.getString("NextNumber", null);
             String  msj  = sharedPreferences.getString("NextMsj", null);
             String cod = sharedPreferences.getString("NextCod",null);
+            String deuda = sharedPreferences.getString("NextDeuda",null);
+            String mesesDeuda = sharedPreferences.getString("NextNumMeses",null);
+            String NombreCli = sharedPreferences.getString("NextNombre",null);
+
             Toast.makeText(Login.this, "Enviando SMS... ", Toast.LENGTH_SHORT).show();
-            CreateSMS(num,cod,msj);
+            if (sharedPreferences.getString("NextNombre",null) ==null  ) {
+                CreateSMS(num, cod, msj);
+            }
+            else {
+
+                CreateSMSPersonalizado(num,deuda,NombreCli,mesesDeuda,cod);
+            }
 
         }
 
@@ -151,6 +161,44 @@ public class Login extends Activity {
     }
 
 
+
+    public  void  CreateSMSPersonalizado (final String numero , String deuda, String nomcli, String meses, final String cod){
+
+        nomcli=nomcli.substring(0,10);
+
+      final String msj = "Estimado "+ nomcli+ " SEDALORETO le informa que tiene una deuda de S/. "+deuda+" soles por " + meses + " meses,sirvase a pagar a la oficina  por favor.";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+
+
+
+                try {
+
+
+                    SmsManager sms = SmsManager.getDefault();
+
+                    sms.sendTextMessage(numero, null, msj, null,null);
+                    Log.i("NUMERO Y MENSAJE  >> ", numero + " - " + msj );
+                    // Log.i("cont mensajes ", String.valueOf(i));
+                    Thread.sleep(3000);
+                    ActulizarCliente( cod);
+                    NextClientePerson(msj);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Log.i("Log acitivity","- OK -");
+
+
+
+
+
+            }
+        }).start();
+    }
+
+
     public  void  CreateSMS (final String numero , final String cod, final String msj){
       //  final String msj =  txtMensaje.getText().toString();
 
@@ -239,6 +287,7 @@ public class Login extends Activity {
                 editor.putString("NextNumber",clts.get(0).Celular);
                editor.putString("NextMsj",msj);
                 editor.putString("NextCod",clts.get(0).codCliente);
+
                 editor.commit();
                 //Process.killProcess(Process.myPid());
                 Intent i = getBaseContext().getPackageManager()
@@ -262,6 +311,58 @@ public class Login extends Activity {
 
 
 
+
+    }
+
+    public  void  NextClientePerson (String mensaje){
+
+        ListaClienteTask listaClienteTask = new ListaClienteTask();
+        AsyncTask<String,String, Cliente[]> asyncTask ;
+        Cliente[] clientes;
+        ArrayList<Cliente> clts  = new ArrayList<Cliente>();
+        // listNumeros = new ArrayList<String>();
+        String url = "http://daniel88344-001-site1.etempurl.com/";
+
+
+        try {
+            asyncTask = listaClienteTask.execute("1",url);
+            clientes = (Cliente[])asyncTask.get();
+            if (clientes != null && clientes.length>0){
+                for (int i  = 0 ; i<clientes.length; i++){
+
+                    clts = ConvertArrToList(clientes);
+
+
+                }
+
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("NextNumber",clts.get(0).Celular);
+                editor.putString("NextMsj",mensaje);
+                editor.putString("NextCod",clts.get(0).codCliente);
+                editor.putString("NextDeuda",clts.get(0).Deuda );
+                editor.putString("NextNumMeses",clts.get(0).Meses);
+                editor.putString("NextNombre",clts.get(0).NombreCliente);
+                editor.commit();
+                //Process.killProcess(Process.myPid());
+                Intent i = getBaseContext().getPackageManager()
+                        .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+            }
+
+            else
+            {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.commit();
+
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
     }
 
