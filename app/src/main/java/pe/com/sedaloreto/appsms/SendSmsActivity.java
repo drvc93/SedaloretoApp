@@ -181,10 +181,10 @@ public class SendSmsActivity extends Activity {
 
 
     public  void  CreateSMS (){
-        String nomcliente = aux_cliente.get(0).NombreCliente.toString().substring(0,10);
+        String nomcliente = aux_cliente.get(0).NombreCliente.toString().substring(0,14);
         String deuda =aux_cliente.get(0).Deuda;
         String meses = aux_cliente.get(0).Meses;
-        final String msj =  "Estimado "+ nomcliente+ " SEDALORETO le informa que tiene una deuda de S/. "+deuda+" soles por " + meses + ", meses,sirvase a pagar a la oficina  por favor.";
+        final String msj =  "Estimado "+ nomcliente+ " SEDALORETO le informa que tiene una deuda de "+deuda+" soles por " + meses + ", meses,sirvase a pagar a la oficina  por favor.";
 
         new Thread(new Runnable() {
             @Override
@@ -349,7 +349,7 @@ public class SendSmsActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.sincronizacion) {
             return true;
         }
 

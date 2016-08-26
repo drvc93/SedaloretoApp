@@ -21,12 +21,92 @@ public class Cliente implements KvmSerializable {
     public  String Deuda;
     public  String Meses;
     public  String Celular;
+    public  String EstadoSms;
 
+    public String getEstadoSms() {
+        return EstadoSms;
+    }
+
+    public void setEstadoSms(String estadoSms) {
+        EstadoSms = estadoSms;
+    }
+
+    public String getCodCliente() {
+        return codCliente;
+    }
+
+    public void setCodCliente(String codCliente) {
+        this.codCliente = codCliente;
+    }
+
+    public String getNombreCliente() {
+        return NombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        NombreCliente = nombreCliente;
+    }
+
+    public String getDescpCortaCalle() {
+        return DescpCortaCalle;
+    }
+
+    public void setDescpCortaCalle(String descpCortaCalle) {
+        DescpCortaCalle = descpCortaCalle;
+    }
+
+    public String getDescpCalle() {
+        return DescpCalle;
+    }
+
+    public void setDescpCalle(String descpCalle) {
+        DescpCalle = descpCalle;
+    }
+
+    public String getNumeroCalle() {
+        return NumeroCalle;
+    }
+
+    public void setNumeroCalle(String numeroCalle) {
+        NumeroCalle = numeroCalle;
+    }
+
+    public String getUrban() {
+        return Urban;
+    }
+
+    public void setUrban(String urban) {
+        Urban = urban;
+    }
+
+    public String getDeuda() {
+        return Deuda;
+    }
+
+    public void setDeuda(String deuda) {
+        Deuda = deuda;
+    }
+
+    public String getMeses() {
+        return Meses;
+    }
+
+    public void setMeses(String meses) {
+        Meses = meses;
+    }
+
+    public String getCelular() {
+        return Celular;
+    }
+
+    public void setCelular(String celular) {
+        Celular = celular;
+    }
 
     public Cliente (){
 
     }
-    public Cliente(String codCliente, String nombreCliente, String descpCortaCalle, String descpCalle, String numeroCalle, String urban, String deuda, String meses, String celular) {
+    public Cliente(String codCliente, String nombreCliente, String descpCortaCalle, String descpCalle, String numeroCalle, String urban, String deuda, String meses, String celular, String estadoSms) {
         this.codCliente = codCliente;
         NombreCliente = nombreCliente;
         DescpCortaCalle = descpCortaCalle;
@@ -36,6 +116,7 @@ public class Cliente implements KvmSerializable {
         Deuda = deuda;
         Meses = meses;
         Celular = celular;
+        EstadoSms = estadoSms;
     }
 
 

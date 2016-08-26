@@ -9,6 +9,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import DatabaseModel.Cliente;
+import Util.Constantes;
 
 /**
  * Created by Daniel on 15/05/2016.
@@ -22,7 +23,7 @@ public class ListaClienteTask extends AsyncTask<String,String, Cliente[]> {
 
         Cliente[] result =  null;
         String urlserver = params[1];
-        final String NAMESPACE = "http://drvc93xd-001-site1.htempurl.com/";
+        final String NAMESPACE = Constantes.UrlWebServices;
         final String URL=NAMESPACE+"WSParticipante.asmx";
         final String METHOD_NAME = "ListaClientes";
         final String SOAP_ACTION = NAMESPACE+METHOD_NAME;
@@ -53,6 +54,7 @@ public class ListaClienteTask extends AsyncTask<String,String, Cliente[]> {
                 cli.Deuda= ic.getProperty(6).toString();
                 cli.Meses= ic.getProperty(7).toString();
                 cli.Celular = ic.getProperty(8).toString();
+                cli.EstadoSms=ic.getProperty(9).toString();
 
 
 

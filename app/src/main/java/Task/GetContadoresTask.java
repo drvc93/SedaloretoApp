@@ -9,24 +9,26 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import DatabaseModel.Cliente;
 import Util.Constantes;
 
 /**
- * Created by drvc_ on 23/07/2016.
+ * Created by drvc_ on 26/08/2016.
  */
-public class ActualizarEstadoTask extends AsyncTask<String , String, String> {
+public class GetContadoresTask extends AsyncTask <String,String,String> {
+    String  result;
     @Override
     protected String doInBackground(String... params) {
         String result ="";
         // String urlserver = params[2];
         final String NAMESPACE = Constantes.UrlWebServices;
         final String URL=NAMESPACE+"WSParticipante.asmx";
-        final String METHOD_NAME = "ActulizarEstadoCliente";
+        final String METHOD_NAME = "GetContadores";
         final String SOAP_ACTION = NAMESPACE+METHOD_NAME;
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-        request.addProperty("codCliente", params[0]);
+        request.addProperty("tipoContador", params[0]);
 
 
         SoapSerializationEnvelope envelope =  new SoapSerializationEnvelope(SoapEnvelope.VER11);

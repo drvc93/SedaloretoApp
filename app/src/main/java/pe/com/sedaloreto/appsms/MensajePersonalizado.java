@@ -31,6 +31,7 @@ import java.util.logging.Handler;
 import DatabaseModel.Cliente;
 import Task.ActualizarEstadoTask;
 import Task.ListaClienteTask;
+import Util.Constantes;
 
 public class MensajePersonalizado extends Activity {
 
@@ -116,7 +117,7 @@ public class MensajePersonalizado extends Activity {
         AsyncTask<String,String, Cliente[]> asyncTask ;
         Cliente[] clientes;
         listNumeros = new ArrayList<String>();
-        String url = "http://daniel88344-001-site1.etempurl.com/";
+        String url = Constantes.UrlWebServices;
 
 
         try {

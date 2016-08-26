@@ -9,6 +9,8 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import Util.Constantes;
+
 /**
  * Created by drvc_ on 28/07/2016.
  */
@@ -19,7 +21,7 @@ public class ResetEstadoSms extends AsyncTask<String,String,String>
     protected String doInBackground(String... params) {
         String result ="";
         // String urlserver = params[2];
-        final String NAMESPACE ="http://drvc93xd-001-site1.htempurl.com/";
+        final String NAMESPACE = Constantes.UrlWebServices;
         final String URL=NAMESPACE+"WSParticipante.asmx";
         final String METHOD_NAME = "ActulizarEstadoSmsClientes";
         final String SOAP_ACTION = NAMESPACE+METHOD_NAME;

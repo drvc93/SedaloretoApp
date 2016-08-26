@@ -72,6 +72,14 @@
                 <Button
                     android:layout_width="fill_parent"
                     android:layout_height="80dp"
+                    android:text="Contador de Mensajes"
+                    android:background="@drawable/butonstyle"
+                    android:id="@+id/btnContadorSms"
+                    android:layout_marginTop="10dp" />
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="80dp"
                     android:text="Cerrar Sesion"
                     android:background="@drawable/butonstyle"
                     android:id="@+id/btnOpcCerrarSesion"
