@@ -64,7 +64,6 @@
             android:text="Aceptar"
             android:id="@+id/btnSalirDialog"
             android:background="@drawable/cornerstext"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp" />
+            android:layout_marginTop="10dp" />
     </LinearLayout>
 </LinearLayout>

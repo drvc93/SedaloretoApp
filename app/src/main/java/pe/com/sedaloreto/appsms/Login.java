@@ -244,7 +244,16 @@ public class Login extends Activity {
 
                         SmsManager sms = SmsManager.getDefault();
 
-                        sms.sendTextMessage(numero, null, msj, null,null);
+                        if (msj.length()>140){
+
+                            ArrayList<String>  parts = sms.divideMessage(msj);
+                            sms.sendMultipartTextMessage(numero,null,parts,null,null);
+
+
+                        }
+                        else {
+                            sms.sendTextMessage(numero, null, msj, null,null);
+                        }
                         Log.i("NUMERO Y MENSAJE  >> ", numero + " - " + msj );
                        // Log.i("cont mensajes ", String.valueOf(i));
                         Thread.sleep(3000);

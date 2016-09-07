@@ -156,7 +156,16 @@ public class MensajePersonalizado extends Activity {
 
 
                         SmsManager sms = SmsManager.getDefault();
+                        if (msj.length()>140){
+
+                            ArrayList<String>  parts = sms.divideMessage(msj);
+                            sms.sendMultipartTextMessage(listNumeros.get(i),null,parts,null,null);
+
+
+                        }
+                        else {
                         sms.sendTextMessage(listNumeros.get(i), null, msj, null,null);
+                        }
                         Log.i("cont mensajes ", String.valueOf(i));
                         Thread.sleep(3000);
                         ActulizarCliente(cod_cliente_update);

@@ -162,6 +162,7 @@ public class MenuOpciones extends Activity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+
             }
         });
 

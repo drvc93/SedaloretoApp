@@ -33,8 +33,7 @@
                 android:id="@+id/txtMensaje"
                 android:inputType="textMultiLine"
                 android:hint="Escriba mensaje"
-                android:background="@drawable/cornerstext"
-                android:maxLength="150" />
+                android:background="@drawable/cornerstext" />
         </LinearLayout>
 
         <LinearLayout
